@@ -22,6 +22,7 @@ export default class App extends Component {
         };
         this.deleteItem = this.deleteItem.bind(this);
         this.addItem = this.addItem.bind(this);
+        this.changeState = this.changeState.bind(this);
         this.onToggleImportant = this.onToggleImportant.bind(this);
         this.onToggleLike = this.onToggleLike.bind(this);
         this.onUpdateSearch = this.onUpdateSearch.bind(this);
@@ -34,12 +35,13 @@ export default class App extends Component {
         return id;
     }
 
-    onToggleImportant(id) {
+   
+
+    changeState(id, item) {
         this.setState(({data}) => {
             const index = data.findIndex(elem => elem.id === id);
-
             const old = data[index];
-            const newItem = {...old, important: !old.important};
+            const newItem = {...old, [item]: !old[item]};
             const newArr = [...data.slice(0, index), newItem, ...data.slice(index+1)];
             return {
                 data: newArr
@@ -47,17 +49,12 @@ export default class App extends Component {
         })
     }
 
-    onToggleLike(id) {
-        this.setState(({data}) => {
-            const index = data.findIndex(elem => elem.id === id);
+    onToggleImportant(id) {
+        this.changeState(id, 'important')
+    }
 
-            const old = data[index];
-            const newItem = {...old, liked: !old.liked};
-            const newArr = [...data.slice(0, index), newItem, ...data.slice(index+1)];
-            return {
-                data: newArr
-            }
-        })
+    onToggleLike(id) {
+        this.changeState(id, 'liked')
     }
     
     searchPost(items, term) {
